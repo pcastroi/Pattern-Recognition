@@ -1,0 +1,51 @@
+close all;clear all
+n=100; % Number of points
+s1=[0.5 0;0 0.5]; % Equal variance, no covariance
+s2=[0.7 0;0 0.5]; % Non-equal variance, no covariance
+s3=[0.7 0.3;0.3 0.5]; % Non-equal variance, covariance
+mu=[1,2]; % Means
+
+%% Distributions 
+D1=mvnrnd(mu,s1,n);
+D2=mvnrnd(mu,s2,n);
+D3=mvnrnd(mu,s3,n);
+
+%% Normalization of the values
+D1_N=zeros(n,2);
+D2_N=zeros(n,2);
+D3_N=zeros(n,2);
+for i=1:n
+    for j=1:2
+    D1_N(i,j)=(D1(i,j)-mu(j))/sqrt(s1(j,j));
+    D2_N(i,j)=(D2(i,j)-mu(j))/sqrt(s2(j,j));
+    D3_N(i,j)=(D3(i,j)-mu(j))/sqrt(s3(j,j));
+    end
+end
+
+s1_N=cov(D1_N);
+s2_N=cov(D2_N);
+s3_N=cov(D3_N);
+
+%% Eigen-vectors and Eigen-values of non-normalization data:
+[evc1,evs1]=eig(s1);
+[evc2,evs2]=eig(s2);
+[evc3,evs3]=eig(s3);
+
+draweig
+
+%% Eigenvectors and Eigenvalues of normalization data:
+[evc1_N,evs1_N]=eig(s1_N);
+[evc2_N,evs2_N]=eig(s2_N);
+[evc3_N,evs3_N]=eig(s3_N);
+
+grafN
+
+%% Values of the matrices:
+disp('Covariance matrix on non-normalization: ')
+s1
+s2
+s3
+disp('Covariance matrix on normalization: ')
+s1_N
+s2_N
+s3_N
